@@ -62,7 +62,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 // Public: no token required
-                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/verify-email", "/api/auth/resend-email").permitAll()
 
                 // BORROWER ("User") only
                 .requestMatchers("/api/user/**").hasRole("BORROWER")

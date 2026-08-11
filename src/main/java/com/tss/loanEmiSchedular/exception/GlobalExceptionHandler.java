@@ -33,20 +33,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
-    // Covers every custom application exception, including UserApiException,
-    // ResourceNotFoundException, UserAlreadyExistsException, BusinessException,
-    // InvalidPageException, EmailSendingException, and the custom
-    // AccessDeniedException — since they all extend ApplicationException,
-    // one handler is enough for all of them.
-    @ExceptionHandler(ApplicationException.class)
-    public ResponseEntity<ErrorResponse> handleException(ApplicationException applicationException, HttpServletRequest httpServletRequest) {
-        log.error("Application Exception: " + applicationException);
-        return buildErrorResponse(
-                applicationException.getMessage(),
-                applicationException.getStatus(),
-                httpServletRequest,
-                null
-        );
+    @ExceptionHandler(OtpMaxAttemptsExceededException.class)
+    public ResponseEntity<String> handleOtpMaxAttemptsExceeded(OtpMaxAttemptsExceededException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    // Thrown by Spring Security when an authenticated user's role doesn't
+    // satisfy hasRole(...)/@PreAuthorize on an endpoint (e.g. a BORROWER
+    // hitting a /api/admin/** endpoint). Returns 403, not 401.
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> handleAccessDenied(AccessDeniedException ex) {
+        return new ResponseEntity<>("Access is denied: you do not have permission to perform this action",
+                HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
