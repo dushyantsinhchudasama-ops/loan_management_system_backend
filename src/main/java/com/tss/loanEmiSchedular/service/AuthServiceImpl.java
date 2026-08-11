@@ -9,6 +9,7 @@ import com.tss.loanEmiSchedular.enums.Role;
 import com.tss.loanEmiSchedular.exception.UserApiException;
 import com.tss.loanEmiSchedular.repository.UserRepository;
 import com.tss.loanEmiSchedular.security.JwtTokenProvider;
+import com.tss.loanEmiSchedular.service.OtpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
+    private final OtpService otpService;
 
     @Override
     public UserResponseDto register(RegistrationRequestDto request) {
@@ -41,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(Role.BORROWER);
 
         user = userRepository.save(user);
+        otpService.createAndSendVerificationOtp(user);
 
         return toDto(user);
     }

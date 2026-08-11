@@ -19,6 +19,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(OtpMaxAttemptsExceededException.class)
+    public ResponseEntity<String> handleOtpMaxAttemptsExceeded(OtpMaxAttemptsExceededException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     // Thrown by Spring Security when an authenticated user's role doesn't
     // satisfy hasRole(...)/@PreAuthorize on an endpoint (e.g. a BORROWER
     // hitting a /api/admin/** endpoint). Returns 403, not 401.
