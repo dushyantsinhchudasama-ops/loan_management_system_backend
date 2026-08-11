@@ -1,9 +1,9 @@
 package com.tss.loanEmiSchedular.controller;
 
-import com.tss.loanEmiSchedular.dto.JwtResponseDto;
-import com.tss.loanEmiSchedular.dto.LoginRequestDto;
-import com.tss.loanEmiSchedular.dto.RegistrationRequestDto;
-import com.tss.loanEmiSchedular.dto.UserResponseDto;
+import com.tss.loanEmiSchedular.dto.response.JwtResponseDto;
+import com.tss.loanEmiSchedular.dto.request.LoginRequestDto;
+import com.tss.loanEmiSchedular.dto.request.RegistrationRequestDto;
+import com.tss.loanEmiSchedular.dto.response.UserResponseDto;
 import com.tss.loanEmiSchedular.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +18,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // Open to everyone. Always creates a BORROWER ("User") account.
+
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> register(@Valid @RequestBody RegistrationRequestDto request) {
         UserResponseDto response = authService.register(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    // Open to everyone — issues a JWT for any of the 3 roles based on
-    // whatever role is stored on that user's account.
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
         JwtResponseDto response = authService.login(request);

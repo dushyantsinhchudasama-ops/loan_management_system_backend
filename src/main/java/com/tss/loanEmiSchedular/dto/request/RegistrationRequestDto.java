@@ -1,4 +1,4 @@
-package com.tss.loanEmiSchedular.dto;
+package com.tss.loanEmiSchedular.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
