@@ -1,4 +1,4 @@
-package com.tss.loanEmiSchedular.service;
+package com.tss.loanEmiSchedular.service.Imp;
 
 import com.tss.loanEmiSchedular.entity.Otp;
 import com.tss.loanEmiSchedular.entity.User;
@@ -6,6 +6,8 @@ import com.tss.loanEmiSchedular.exception.OtpMaxAttemptsExceededException;
 import com.tss.loanEmiSchedular.exception.UserApiException;
 import com.tss.loanEmiSchedular.repository.OtpRepository;
 import com.tss.loanEmiSchedular.repository.UserRepository;
+import com.tss.loanEmiSchedular.service.EmailService;
+import com.tss.loanEmiSchedular.service.OtpService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

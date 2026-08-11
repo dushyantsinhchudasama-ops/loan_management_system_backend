@@ -8,11 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Endpoints reachable only by an authenticated LOAN_OFFICER
- * ("loan_manager"), enforced by SecurityConfig's
- * "/api/loan-manager/**" -> hasRole("LOAN_OFFICER") rule.
- */
+
 @RestController
 @RequestMapping("/api/loan-manager")
 public class LoanManagerController {

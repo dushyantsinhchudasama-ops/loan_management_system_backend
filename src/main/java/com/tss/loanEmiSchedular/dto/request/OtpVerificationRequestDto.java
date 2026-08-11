@@ -1,4 +1,4 @@
-package com.tss.loanEmiSchedular.dto;
+package com.tss.loanEmiSchedular.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,9 +11,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtpResendRequestDto {
+public class OtpVerificationRequestDto {
 
     @NotBlank
     @Email
     private String email;
+
+    @NotBlank
+    private String otp;
 }

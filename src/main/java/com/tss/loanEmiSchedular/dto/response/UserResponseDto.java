@@ -1,4 +1,4 @@
-package com.tss.loanEmiSchedular.dto;
+package com.tss.loanEmiSchedular.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

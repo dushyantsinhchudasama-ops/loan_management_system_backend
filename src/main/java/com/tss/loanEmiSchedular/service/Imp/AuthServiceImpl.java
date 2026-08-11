@@ -1,14 +1,15 @@
-package com.tss.loanEmiSchedular.service;
+package com.tss.loanEmiSchedular.service.Imp;
 
-import com.tss.loanEmiSchedular.dto.JwtResponseDto;
-import com.tss.loanEmiSchedular.dto.LoginRequestDto;
-import com.tss.loanEmiSchedular.dto.RegistrationRequestDto;
-import com.tss.loanEmiSchedular.dto.UserResponseDto;
+import com.tss.loanEmiSchedular.dto.response.JwtResponseDto;
+import com.tss.loanEmiSchedular.dto.request.LoginRequestDto;
+import com.tss.loanEmiSchedular.dto.request.RegistrationRequestDto;
+import com.tss.loanEmiSchedular.dto.response.UserResponseDto;
 import com.tss.loanEmiSchedular.entity.User;
 import com.tss.loanEmiSchedular.enums.Role;
 import com.tss.loanEmiSchedular.exception.UserApiException;
 import com.tss.loanEmiSchedular.repository.UserRepository;
 import com.tss.loanEmiSchedular.security.JwtTokenProvider;
+import com.tss.loanEmiSchedular.service.AuthService;
 import com.tss.loanEmiSchedular.service.OtpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

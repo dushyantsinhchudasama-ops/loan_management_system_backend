@@ -1,9 +1,9 @@
 package com.tss.loanEmiSchedular.service;
 
-import com.tss.loanEmiSchedular.dto.JwtResponseDto;
-import com.tss.loanEmiSchedular.dto.LoginRequestDto;
-import com.tss.loanEmiSchedular.dto.RegistrationRequestDto;
-import com.tss.loanEmiSchedular.dto.UserResponseDto;
+import com.tss.loanEmiSchedular.dto.response.JwtResponseDto;
+import com.tss.loanEmiSchedular.dto.request.LoginRequestDto;
+import com.tss.loanEmiSchedular.dto.request.RegistrationRequestDto;
+import com.tss.loanEmiSchedular.dto.response.UserResponseDto;
 
 public interface AuthService {
 
