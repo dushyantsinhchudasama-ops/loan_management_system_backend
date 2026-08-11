@@ -66,6 +66,13 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public void verifyEmailOtp(String email, String otp) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserApiException("No account found with this email"));
+
+        if (Boolean.TRUE.equals(user.isEmailVerified())) {
+            throw new UserApiException("Email is already verified");
+        }
+
         Otp otpEntity = otpRepository
                 .findTopByEmailAndIsVerifiedFalseAndIsInvalidatedFalseOrderByCreatedAtDesc(email)
                 .orElseThrow(() -> new UserApiException("OTP not found or already verified. Request a new code."));
@@ -97,14 +104,14 @@ public class OtpServiceImpl implements OtpService {
         otpEntity.setVerified(true);
         otpRepository.save(otpEntity);
 
-        User user = otpEntity.getUser();
-        if (user == null) {
-            user = userRepository.findByEmail(email)
+        User otpOwner = otpEntity.getUser();
+        if (otpOwner == null) {
+            otpOwner = userRepository.findByEmail(email)
                     .orElseThrow(() -> new UserApiException("User not found for provided email"));
         }
 
-        user.setEmailVerified(true);
-        userRepository.save(user);
+        otpOwner.setEmailVerified(true);
+        userRepository.save(otpOwner);
     }
 
     private void invalidateActiveOtps(String email) {
