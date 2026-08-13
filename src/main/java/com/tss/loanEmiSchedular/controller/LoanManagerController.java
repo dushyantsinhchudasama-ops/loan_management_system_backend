@@ -1,28 +1,46 @@
 package com.tss.loanEmiSchedular.controller;
 
+import com.tss.loanEmiSchedular.dto.request.LoanDecisionRequestDto;
+import com.tss.loanEmiSchedular.dto.response.LoanSummaryResponseDto;
+import com.tss.loanEmiSchedular.service.OfficerService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/api/loan-manager")
+@RequiredArgsConstructor
 public class LoanManagerController {
 
-    @GetMapping("/loans/pending")
-    public ResponseEntity<String> pendingLoans(Authentication authentication) {
-        return ResponseEntity.ok(
-                "Loans with status = PENDING, awaiting review by " + authentication.getName());
+    private final OfficerService officerService;
+
+    @GetMapping("/applications")
+    public ResponseEntity<List<LoanSummaryResponseDto>> getLoanApplications() {
+        return new ResponseEntity<>(officerService.viewPendingApplications(), HttpStatus.OK);
     }
 
-    // Placeholder — would call a LoanService to flip Loan.status from
-    // PENDING to APPROVED/REJECTED and write an AuditLog row.
-    @PutMapping("/loans/{loanId}/decision")
-    public ResponseEntity<String> decide(@PathVariable Long loanId) {
-        return ResponseEntity.ok("Approve/reject logic for loan " + loanId + " would run here.");
+    @GetMapping("/applications/pages")
+    public ResponseEntity<Page<LoanSummaryResponseDto>> getLoanApplicationsByPage(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(officerService.viewPendingApplicationsByPage(pageable), HttpStatus.OK);
+    }
+
+    @PostMapping("/loans/{loanId}/decision")
+    public ResponseEntity<String> decideLoan(@PathVariable Long loanId, @Valid @RequestBody LoanDecisionRequestDto loanDecisionRequestDto, Authentication authentication) {
+        return new ResponseEntity<>(officerService.decideLoan(loanId, loanDecisionRequestDto,authentication.getName()), HttpStatus.OK);
+    }
+
+    @GetMapping("/loans/{loanId}")
+    public ResponseEntity<LoanSummaryResponseDto> viewLoanDetails(@PathVariable Long loanId) {
+        return new ResponseEntity<>(officerService.viewLoan(loanId), HttpStatus.OK);
     }
 }
