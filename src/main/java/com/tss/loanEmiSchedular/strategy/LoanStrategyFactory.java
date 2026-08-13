@@ -19,7 +19,7 @@ public class LoanStrategyFactory {
 
         if (dti  < 20) {
             return lowRiskStrategy;
-        } else if (dti >=20 && dti <= 40  ) {
+        } else if (dti >=20 && dti <= 40  ) { 
             return midRiskStrategy;
         } else {
             return highRiskStrategy;
