@@ -48,7 +48,7 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     @Transactional
-    public String applyLoan(LoanApplicationRequest request, String email) {
+    public String   applyLoan(LoanApplicationRequest request, String email) {
         log.info("Applying loan for user: {}", email);
 
         User user = userRepository.findByEmail(email)
@@ -80,6 +80,7 @@ public class LoanServiceImpl implements LoanService {
         BigDecimal existingDebt = profile.getExistingDebt();
         BigDecimal dti = (existingDebt.divide(monthlyIncome, 2, RoundingMode.HALF_UP)).multiply(BigDecimal.valueOf(100));
 //        System.out.println("Dti done");
+        System.out.println(dti);
 
         LoanStrategy strategy = strategyFactory.getStrategy(dti);
 
@@ -116,12 +117,14 @@ public class LoanServiceImpl implements LoanService {
         BigDecimal totalMonthlyDebt = existingDebt.add(baseEmi);
         BigDecimal finalDti = totalMonthlyDebt.divide(monthlyIncome, 2, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
+        System.out.println(finalDti);
 //        System.out.println("finalDti: " + finalDti);
 
         if (finalDti.compareTo(BigDecimal.valueOf(HIGH_DTI_THRESHOLD)) > 0) {
             loan.setStatus(LoanStatus.REJECTED);
             log.info("Final dti of user is >40 , So Loan Rejected");
             loan.setDti(finalDti);
+            System.out.println(finalDti);
             loanRepository.save(loan);
             return "Loan Rejected Due to High DTI, You will not be able to pay current EMI of loan";
         }
