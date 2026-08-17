@@ -16,14 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-/**
- * Runs once per request, ahead of Spring Security's own
- * UsernamePasswordAuthenticationFilter. Reads the "Authorization: Bearer
- * <token>" header, validates it, and — if valid — populates the
- * SecurityContext so the rest of the filter chain (and @PreAuthorize /
- * hasRole checks in SecurityConfig) see an authenticated user with the
- * right role's authority.
- */
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

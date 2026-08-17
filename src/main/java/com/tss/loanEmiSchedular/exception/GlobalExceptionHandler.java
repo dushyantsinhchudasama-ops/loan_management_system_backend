@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -33,19 +34,34 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
-    @ExceptionHandler(OtpMaxAttemptsExceededException.class)
-    public ResponseEntity<String> handleOtpMaxAttemptsExceeded(OtpMaxAttemptsExceededException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    // Thrown by Spring Security when an authenticated user's role doesn't
-    // satisfy hasRole(...)/@PreAuthorize on an endpoint (e.g. a BORROWER
-    // hitting a /api/admin/** endpoint). Returns 403, not 401.
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDenied(AccessDeniedException ex) {
         return new ResponseEntity<>("Access is denied: you do not have permission to perform this action",
                 HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<ErrorResponse> handleApplicationException(
+            ApplicationException ex,
+            HttpServletRequest request) {
+
+        log.error("Application Exception: " + ex);
+        return buildErrorResponse(
+                ex.getMessage(),
+                ex.getStatus(),
+                request,
+                null
+        );
+    }
+
+
+    @ExceptionHandler(OtpMaxAttemptsExceededException.class)
+    public ResponseEntity<String> handleOtpMaxAttemptsExceeded(OtpMaxAttemptsExceededException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationErrors(
@@ -82,17 +98,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidEnum(HttpMessageNotReadableException ex,
-                                                            HttpServletRequest request) {
-        log.error("Json parse Exception: " + ex);
-        return buildErrorResponse(
-                ex.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                request,
-                null
-        );
-    }
+
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(
@@ -107,9 +113,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // Newer Spring Security 6 method-security failures (@PreAuthorize on a
-    // controller method) surface as this exception.
-    @ExceptionHandler(org.springframework.security.authorization.AuthorizationDeniedException.class)
+    @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAuthorizationDenied(
             org.springframework.security.authorization.AuthorizationDeniedException ex,
             HttpServletRequest request) {
@@ -122,22 +126,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    // Older / framework-level access-denied checks (e.g. filter chain
-    // authorization, some Spring Security internals) still throw this type
-    // instead of AuthorizationDeniedException, so it's handled too.
-    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
-    public ResponseEntity<ErrorResponse> handleSecurityAccessDenied(
-            org.springframework.security.access.AccessDeniedException ex,
-            HttpServletRequest request) {
 
-        log.error("Access Denied Exception: " + ex);
-        return buildErrorResponse(
-                "Access is denied: you do not have permission to perform this action",
-                HttpStatus.FORBIDDEN,
-                request,
-                null
-        );
-    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(

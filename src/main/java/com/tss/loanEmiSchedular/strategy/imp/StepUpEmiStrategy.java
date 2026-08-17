@@ -18,7 +18,7 @@ public class StepUpEmiStrategy implements EmiStrategy {
 
     private static final BigDecimal STEP_FACTOR = BigDecimal.valueOf(1.10);
     private static final int SCALE = 10;
-    private static final BigDecimal TOLERANCE = BigDecimal.valueOf(0.01);
+
 
     @Override
     @Transactional
@@ -101,10 +101,6 @@ public class StepUpEmiStrategy implements EmiStrategy {
 
             BigDecimal remaining = simulate(loan, emi);
 
-            // Convergence check
-//            if (remaining.abs().compareTo(TOLERANCE) < 0) {
-//                break;
-//            }
 
             if (remaining.compareTo(BigDecimal.ZERO) > 0) {
                 low = emi;   // EMI too small

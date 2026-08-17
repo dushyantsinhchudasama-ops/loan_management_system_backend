@@ -29,10 +29,7 @@ public class JwtTokenProvider {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
-        // authorities holds exactly one entry, e.g. "ROLE_ADMIN" — embed it
-        // as a claim so the filter can (optionally) read the role straight
-        // off the token without a DB hit, and so client apps can branch UI
-        // on it after login.
+
         String role = authentication.getAuthorities()
                 .stream()
                 .findFirst()
