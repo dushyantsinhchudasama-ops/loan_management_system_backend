@@ -25,9 +25,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        // "ROLE_" prefix is the Spring Security convention that lets
-        // hasRole("ADMIN") in SecurityConfig match an authority of
-        // "ROLE_ADMIN" without every matcher having to spell it out.
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 

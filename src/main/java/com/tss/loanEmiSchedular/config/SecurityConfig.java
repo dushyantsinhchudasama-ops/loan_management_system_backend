@@ -17,21 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * Central place the whole role-based-access flow is wired up.
- *
- * Role model (see com.tss.loanEmiSchedular.enums.Role):
- *   BORROWER      -> the "User" role — self-registers, manages their own
- *                     loans/EMIs.
- *   LOAN_OFFICER  -> the "loan_manager" role — reviews/approves loans,
- *                     created only by an ADMIN.
- *   ADMIN         -> full platform administration, created only by an
- *                     existing ADMIN (or seeded at startup).
- *
- * @EnableMethodSecurity turns on @PreAuthorize so individual controller
- * methods can also declare their own role checks in addition to (or
- * instead of) the URL-pattern rules below.
- */
 @Configuration(proxyBeanMethods = false)
 @EnableMethodSecurity
 @RequiredArgsConstructor

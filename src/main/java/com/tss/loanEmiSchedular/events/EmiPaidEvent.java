@@ -10,9 +10,11 @@ import lombok.Setter;
 public class EmiPaidEvent {
     private final Emi emi;
     private final User borrower;
+    private final boolean wasOverdue;
 
-    public EmiPaidEvent(Emi emi, User borrower) {
+    public EmiPaidEvent(Emi emi, User borrower, boolean wasOverdue) {
         this.emi = emi;
         this.borrower = borrower;
+        this.wasOverdue = wasOverdue;
     }
 }

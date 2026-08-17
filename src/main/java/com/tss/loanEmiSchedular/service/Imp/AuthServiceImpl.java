@@ -60,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
                             loginDto.getPassword()
                     )
             );
+            System.out.println(authentication);
 
             String token = tokenProvider.generateToken(authentication);
 

@@ -49,9 +49,9 @@ public class KycServiceImpl  implements KycService {
         if (user.isKycVerified()) {
             throw new BusinessException("KYC already completed", HttpStatus.CONFLICT);        }
 
-//        FinancialProfile fp = financialProfileRepository
-//                .findByPanAndNameAndDob(hashedPan, kycRequestDto.getName(), kycRequestDto.getDob())
-//                .orElseThrow(() -> new BadCredentialsException("Invalid Credentials"));
+        FinancialProfile fp = financialProfileRepository
+                .findByPanAndNameAndDob(hashedPan, kycRequestDto.getName(), kycRequestDto.getDob())
+                .orElseThrow(() -> new BadCredentialsException("Invalid Credentials"));
 
         BorrowerProfile borrowerProfile=new BorrowerProfile();
         borrowerProfile.setPan(hashedPan);

@@ -92,13 +92,17 @@ PaymentServiceImpl implements PaymentService {
             return dto;
         }
 
+        boolean wasOverdue = emi.getEmiStatus() == EmiStatus.OVERDUE;   // ← PAID hone se pehle capture
+
         Payment payment = processPayment(emi,nextEmi, txnId);
         log.info("EMI #{} paid for loan {}. TxnId: {}", emi.getInstallmentNumber(), loanId, txnId);
 
         PaymentResponseDto dto = borrowerMapper.toPaymentDto(payment);
         dto.setMessage("EMI #" + emi.getInstallmentNumber() + " paid successfully.");
 
-        applicationEventPublisher.publishEvent(new EmiPaidEvent(emi,emi.getLoan().getBorrower().getUser()));
+        applicationEventPublisher.publishEvent(
+                new EmiPaidEvent(emi, emi.getLoan().getBorrower().getUser(), wasOverdue)
+        );
         return dto;
     }
 

@@ -9,7 +9,6 @@ public interface PaymentService {
 
     PaymentResponseDto payEmi(String email, Long loanId);
 
-    // ── Payment history for an EMI ────────────────────────────────────────────
     List<PaymentHistoryResponseDto> getPaymentHistoryByEmi(String email, Long emiId);
 
     List<PaymentHistoryResponseDto> getPaymentHistory(String email, Long loanId);
