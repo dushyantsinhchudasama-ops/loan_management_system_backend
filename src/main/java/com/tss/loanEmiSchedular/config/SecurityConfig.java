@@ -55,6 +55,9 @@ public class SecurityConfig {
                 // LOAN_OFFICER ("loan_manager") only
                 .requestMatchers("/api/loan-manager/**").hasRole("LOAN_OFFICER")
 
+                // Audit endpoints: officers and admins can read them
+                .requestMatchers("/api/admin/audit/**").hasAnyRole("LOAN_OFFICER", "ADMIN")
+
                 // ADMIN only — includes staff creation
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
